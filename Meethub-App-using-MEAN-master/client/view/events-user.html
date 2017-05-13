@@ -1,0 +1,67 @@
+<div>
+
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">Welcome to Event Management.</span>
+                    </li>
+                    <li>
+                        <a ng-controller="main-ctrl" ng-click="logOut()">
+                            <i class="fa fa-sign-out"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2"></div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="user-panel-text">User Panel  </div>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="user-panel-box">
+                    <div class="user-panel-name"><i class="fa fa-user" aria-hidden="true"></i>  {{Userpanel_name}}</div>
+                    <div class="user-panel-contact"><i class="fa fa-envelope" aria-hidden="true"></i>  {{Userpanel_email}}</div>
+                    <div class="user-panel-email"><i class="fa fa-phone" aria-hidden="true"></i>  {{Userpanel_contact}}</div>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2"></div>
+        </div>
+
+
+
+    <div class="events-table">
+    <div class="table-responsive">
+        <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs"
+               class="table table-bordered table-striped row-border" id="expenses-table">
+            <thead>
+            <tr>
+                <th class="table_heading">Detail</th>
+                <th class="table_heading_center">Title</th>
+                <th class="table_heading_center">Type</th>
+                <th class="table_heading_center">Price</th>
+                <th class="table_heading_center">Duration</th>
+                <th class="table_heading_center">City</th>
+                <th class="table_heading_center">Country</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="(key,event) in eventData | orderBy:'key'">
+                <td class="table_text"><span  ui-sref="event_detail({ id: event.id })" class="navbar-minimalize minimalize-styl-2 btn btn-primary " ><i class="fa fa-eye detail-eye-btn" aria-hidden="true"></i></span></td>
+                <td class="table_text_center" style=" vertical-align: middle">{{event.title}}</td>
+                <td class="table_text_center" style=" vertical-align: middle">{{event.eventType}}</td>
+                <td class="table_text_center" style=" vertical-align: middle">{{event.price | currency:0}}</td>
+                <td class="table_text_center" style=" vertical-align: middle">{{event.startDate | date:"dd/MM/yyyy"}} - {{event.endDate | date:"dd/MM/yyyy"}}</td>
+                <td class="table_text_center" style=" vertical-align: middle">{{event.city}}</td>
+                <td class="table_text_center" style=" vertical-align: middle">{{event.country}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+    </div>

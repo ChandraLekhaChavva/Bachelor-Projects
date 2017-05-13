@@ -1,0 +1,253 @@
+<div>
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">Welcome to Event Management.</span>
+                    </li>
+                    <li>
+                        <a ng-controller="main-ctrl" ng-click="logOut()">
+                            <i class="fa fa-sign-out"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-5 col-sm-5 col-lg-5">
+            </div>
+            <div class="col-md-3 col-sm-3 col-lg-3">
+                <h1  ng-if="userRole=='admin'">Admin</h1><h1 ng-if="userRole=='user'">User</h1>
+            </div>
+            <div class="col-md-4 col-sm-4 col-lg-4"></div>
+            </div>
+            
+        <div class="row">
+            <div class="col-md-11 col-sm-11 col-lg-11">
+            </div>
+            <div class="col-md-1 col-sm-1 col-lg-1">
+                <div class="navbar-minimalize minimalize-styl-2 btn btn-primary" ng-if="userRole=='admin'"
+                     ui-sref="events-admin">< Back
+                </div>
+                <div class="navbar-minimalize minimalize-styl-2 btn btn-primary" ng-if="userRole=='user'"
+                     ui-sref="events-user">< Back
+                </div>
+            </div>
+        </div>
+
+        <!--page view-->
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-lg-8">
+                <h1 class="event-detail-title">{{eventDetailData.title}}</h1>
+            </div>
+            <div class="col-md-4 col-sm-4 col-lg-4" ng-if="userRole=='user'">
+                <div ng-if="subscribed && !capacityFull" class="col-md-4 col-sm-4 col-lg-4 btn btn-primary register-with-event"
+                     title="Subscribe Event" ng-click="subscribeEvent()">Subscribe
+                </div>
+                <div ng-if="!subscribed" class="col-md-4 col-sm-4 col-lg-4 btn btn-primary register-with-event"
+                     title="UnSubscribe Event" ng-click="unSubscribeEvent()">Un-subscribe
+                </div>
+                <div ng-if="capacityFull" class="navbar-minimalize minimalize-styl-2 btn btn-primary"
+                     title="Subscribe Event">MAX. Capacity Reached
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-lg-6">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-description">
+                        <div>{{eventDetailData.eventDescription}}</div>
+                    </div>
+                </div>
+                <div class="row jumbotron event-detail-capacity">
+                    <div class="col-md-6 col-sm-6 col-lg-6 capcity-block">
+                        <div class="col-md-2 col-sm-2 col-lg-2"></div>
+                        <div class="col-md-4 col-sm-4 col-lg-4">
+                            <span class="capacity-icon"><i class="fa fa-users fa-3x " aria-hidden="true"></i></span>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-lg-6">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-lg-12 capacity-text ">MAX.
+                                    {{eventDetailData.capacity}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-lg-12 capacity-text">PERSONS</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-lg-6">
+                        <div class="col-md-2 col-sm-2 col-lg-2"></div>
+                        <div class="col-md-4 col-sm-4 col-lg-4">
+                            <span class="capacity-icon"><i class="fa fa-money fa-3x " aria-hidden="true"></i></span>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-lg-6">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-lg-12 capacity-text ">$ {{eventDetailData.price |
+                                    number:2}} /
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-lg-12 capacity-text">PERSON</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-eventType">
+                        <div><span class="col-md-4 col-sm-4 col-lg-4 event-detail-eventType-text"><i
+                                class="fa fa-bullhorn" aria-hidden="true"></i>
+                         Event Type     : </span><span class="col-md-8 col-sm-8 col-lg-8 event-detail-eventType-value">{{eventDetailData.eventType}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12  event-detail-startDate">
+                        <div><span class="col-md-4 col-sm-4 col-lg-4 event-detail-startDate-text"> Stard At :</span>
+                            <span class="col-md-3 col-sm-3 col-lg-3 event-detail-startDate-value"><i
+                                    class="fa fa-calendar-check-o" aria-hidden="true"></i> {{eventDetailData.startDate | date:'dd/mm/yyyy'}}</span>
+                            <span class="col-md-4 col-sm-4 col-lg-4 event-detail-startTime-time"><i
+                                    class="fa fa-clock-o" aria-hidden="true"></i>   {{eventDetailData.startDate | date:'hh:mm:ss a'}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12  event-detail-startDate">
+                        <div><span class="col-md-4 col-sm-4 col-lg-4 event-detail-startDate-text"> End At :</span>
+                            <span class="col-md-3 col-sm-3 col-lg-3 event-detail-startDate-value"><i
+                                    class="fa fa-calendar-check-o" aria-hidden="true"></i> {{eventDetailData.endDate | date:'dd/mm/yyyy'}}</span>
+                            <span class="col-md-4 col-sm-4 col-lg-4 event-detail-startTime-time"><i
+                                    class="fa fa-clock-o" aria-hidden="true"></i>   {{eventDetailData.endDate | date:'hh:mm:ss a'}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row above-organizer"></div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12  event-detail-organizerDetail-text">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        Organizer
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-organizerDetail">
+                        <span class="col-md-4 col-sm-4 col-lg-4 event-detail-organizer-value"><i class="fa fa-user"
+                                                                                                 aria-hidden="true"></i>  Name : </span>
+
+                        <div class="col-md-8 col-sm-8 col-lg-8 event-detail-organizerDetail-value">
+                            {{organizer.fullName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-organizerDetail">
+                        <span class="col-md-4 col-sm-4 col-lg-4 event-detail-organizer-value"><i class="fa fa-phone"
+                                                                                                 aria-hidden="true"></i>  Email : </span>
+
+                        <div class="col-md-8 col-sm-8 col-lg-8 event-detail-organizerDetail-value">
+                            {{organizer.email}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-organizerDetail">
+                        <span class="col-md-4 col-sm-4 col-lg-4 event-detail-organizer-value"><i class="fa fa-phone"
+                                                                                                 aria-hidden="true"></i>  Contact Detail : </span>
+
+                        <div class="col-md-8 col-sm-8 col-lg-8 event-detail-organizerDetail-value">
+                            {{organizer.contactNo}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6">
+
+
+                <div class="col-xs-12 col-md-12 col-lg-12 col-sm-12 map-event-Create">
+                    <div class="modal-header">
+                        <!--<h3 class="modal-title">Event Loaction!</h3>-->
+                    </div>
+                    <div class="modal-body">
+                        <map ng-if="render" center="[{{geopos.lat}}, {{geopos.lng}}]" zoom-control="true" zoom="8"
+                             on-click="click()"><marker position="{{geopos.lat}},{{geopos.lng}}" title="{{pin.title}}"></marker></map>
+                        <div>{{validation_text}}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-contact">
+                        <div class="col-md-4 col-sm-4 col-lg-4  event-detail-contact-text"><i class="fa fa-phone"
+                                                                                              aria-hidden="true"></i>
+                            Contact Detail
+                        </div>
+                        <div class="col-md-8 col-sm-8 col-lg-8 event-detail-contact-value">
+                            {{eventDetailData.contactDetail}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-address">
+                        <div class="col-md-4 col-sm-4 col-lg-4  event-detail-address-text"><i
+                                class="fa fa-location-arrow" aria-hidden="true"></i> Address
+                        </div>
+                        <div class="col-md-8 col-sm-8 col-lg-8 event-detail-address-value">{{eventDetailData.address}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-city">
+                        <div class="col-md-4 col-sm-4 col-lg-4  event-detail-city-text"><i class="fa fa-building"
+                                                                                           aria-hidden="true"></i> City
+                        </div>
+                        <div class="col-md-8 col-sm-8 col-lg-8 event-detail-city-value">{{eventDetailData.city}}</div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-12 col-sm-12 col-lg-12 event-detail-country">
+                        <div class="col-md-4 col-sm-4 col-lg-4  event-detail-country-text"><i class="fa fa-globe"
+                                                                                              aria-hidden="true"></i>
+                            Country
+                        </div>
+                        <div class="col-md-8 col-sm-8 col-lg-8 event-detail-country-value">{{eventDetailData.country}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row subscriber-section">
+            <div class="col-md-12 col-sm-12 col-lg-12"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-12  event-detail-organizerDetail-text"><i class="fa fa-users"
+                                                                                             aria-hidden="true"></i>  Subscribers
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-3 col-lg-3 subscriber-detail" ng-repeat="subscriber in subscribers">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-lg-12 ">
+                        <div class="col-md-6 col-sm-6 col-lg-6  event-detail-subscriber-name-text"><i class="fa fa-user"
+                                                                                                      aria-hidden="true"></i>
+                            Name :
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-lg-6  event-detail-subscriber-name-value">
+                            {{subscriber.fullName}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-lg-12 ">
+                            <div class="col-md-6 col-sm-6 col-lg-6 event-detail-subscriber-contact-text"><i
+                                    class="fa fa-phone" aria-hidden="true"></i> Contact :
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-lg-6  event-detail-subscriber-contact-value">
+                                {{subscriber.contactNo}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>

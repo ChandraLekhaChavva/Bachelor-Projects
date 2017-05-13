@@ -1,0 +1,314 @@
+<div>
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">Welcome to Event Management.</span>
+                    </li>
+                    <li>
+                        <a ng-controller="main-ctrl" ng-click="logOut()">
+                            <i class="fa fa-sign-out"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2"></div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="user-panel-text">Admin Panel  </div>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="user-panel-box">
+                    <div class="user-panel-name"><i class="fa fa-user" aria-hidden="true"></i>  {{Userpanel_name}}</div>
+                    <div class="user-panel-contact"><i class="fa fa-envelope" aria-hidden="true"></i>  {{Userpanel_email}}</div>
+                    <div class="user-panel-email"><i class="fa fa-phone" aria-hidden="true"></i>  {{Userpanel_contact}}</div>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2"></div>
+        </div>
+
+        <div class="events-table">
+            <div class="table-responsive">
+                <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-bordered table-striped row-border"
+                    id="expenses-table">
+                    <thead>
+                        <tr class="row">
+                            <div class="col-md-11 col-sm-11 col-lg-11"></div>
+                            <div class="col-sm-1 col-md-1 col-lg-1" style="margin-right:30px">
+                                <div class="btn btn-default create-new-event" ng-click="$ctrl.createModel('lg')">Create Event</div>
+                            </div>
+                        </tr>
+                        <tr>
+                            <th class="table_heading">Detail</th>
+                            <th class="table_heading_center">Title</th>
+                            <th class="table_heading_center">Type</th>
+                             <th class="table_heading_center">Price</th>
+                             <th class="table_heading_center">Duration</th>
+                            <th class="table_heading_center">City</th>
+                            <th class="table_heading_center">Country</th>                            
+                            <th class="table_heading_center">Edit</th>
+                            <th class="table_heading_center">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key,event) in eventData | orderBy:'key'">
+                            <td class="table_text"><span  ui-sref="event_detail({ id: event.id })" class="navbar-minimalize minimalize-styl-2 btn btn-primary " ><i class="fa fa-eye detail-eye-btn" aria-hidden="true"></i></span></td>
+                            <td class="table_text_center" style=" vertical-align: middle">{{event.title}}</td>
+                            <td class="table_text_center" style=" vertical-align: middle">{{event.eventType}}</td>
+                            <td class="table_text_center" style=" vertical-align: middle">{{event.price | currency:0}}</td>
+                            <td class="table_text_center" style=" vertical-align: middle">{{event.startDate | date:"dd/MM/yyyy"}} - {{event.endDate | date:"dd/MM/yyyy"}}</td>
+                            <td class="table_text_center" style=" vertical-align: middle">{{event.city}}</td>
+                            <td class="table_text_center" style=" vertical-align: middle">{{event.country}}</td>
+                            <td class="table_text_center">
+                                <span><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " ng-click="$ctrl.editModel(event,'lg')"><em
+                            class="fa fa-pencil"></em></a></span>
+                            </td>
+                            <td class="table_text_center">
+                                <span><a class="btn btn-danger navbar-minimalize minimalize-styl-2" ng-click="deleteEvent(event)"><em
+                            class="fa fa-trash"></em></a></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--creating a new event in model-->
+        <script type="text/ng-template" id="EventCreate.html">
+    <div class="row ui-model-container">
+        <div class="head-modal">
+            <h2 class="col-md-12 modal-title" style="margin:40px">Create a new Event!</h2>
+        </div>
+        <div class="body-modal">
+            <div class="row" style="margin:15px 15px 15px 50px">
+
+                <div class="col-xs-6 col-md-6 col-lg-6 col-sm-6 map-event-Create">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Select Your Loaction</h3>
+                    </div>
+                    <div class="modal-body">
+                        <map ng-if="render" center="[{{geopos.lat}}, {{geopos.lng}}]" zoom-control="true" zoom="8"
+                             on-click="click()"></map>
+                        <div>{{validation_text}}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <!--<div>Latitude:{{geopos.lat}} Longitude:{{geopos.lng}}</div>-->
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-md-6 col-lg-6 col-sm-6">
+                    <form id="registerForm" novalidate name="new_Event_create_form"
+                          ng-submit="submit_createEvent(event_create,geopos.lat,geopos.lng)">
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="event_create.title" title="Event Title" name="title"
+                                ng-required= "true" placeholder="Event Title" ng-class="{'error-field' :  new_Event_create_form.title.$invalid && !new_Event_create_form.title.$pristine}">  
+                          <span ng-show="new_Event_create_form.title.$dirty && new_Event_create_form.title.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Title is required</span>    
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="event_create.eventDescription"
+                                   title="Event Description" ng-required="true" placeholder="Event Description" name="eventDesc"
+                                   ng-class="{'error-field' :  new_Event_create_form.eventDesc.$invalid && !new_Event_create_form.eventDesc.$pristine}">
+                          <span ng-show="new_Event_create_form.eventDesc.$dirty && new_Event_create_form.eventDesc.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Event Description is required</span>    
+
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-control" ng-model="event_create.contactDetail" title="Contact" placeholder="Contact" ng-required="true" ng-pattern="/[0-9]{10}/" name="contact"
+                            ng-class="{'error-field' :  new_Event_create_form.contact.$invalid && !new_Event_create_form.contact.$pristine}">
+                         <span ng-show="new_Event_create_form.contact.$dirty && new_Event_create_form.contact.$error.required && new_Event_create_form.contact.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Contact is required</span>
+                    <span ng-show="new_Event_create_form.contact.$dirty && new_Event_create_form.contact.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Contact format : (0123456789)</span>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="event_create.address" title="Address" name="address"
+                                   ng-required="true" ng-class="{'error-field' :  new_Event_create_form.address.$invalid && !new_Event_create_form.address.$pristine}"
+                                   placeholder="Address">                                                    
+                         <span ng-show="new_Event_create_form.address.$dirty && new_Event_create_form.address.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Address is required</span>
+
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="event_create.city" title="City" ng-required="true" name="city"
+                            ng-class="{'error-field' :  new_Event_create_form.city.$invalid && !new_Event_create_form.city.$pristine}" placeholder="Event City">
+                            <span ng-show="new_Event_create_form.city.$dirty && new_Event_create_form.city.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>City is required</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="event_create.country" title="Country" ng-required="true" ng-model="event_create.country" name="country" placeholder="Country"
+                        ng-class="{'error-field' :  new_Event_create_form.country.$invalid && !new_Event_create_form.country.$pristine}">
+                    <span ng-show="new_Event_create_form.country.$dirty && new_Event_create_form.country.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Country is required</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Event Type" class="form-control"
+                                   ng-model="event_create.eventType" list="eventTypeList" placeholder="Event type" ng-required="true"
+                                    name="event_type" ng-class="{'error-field' :  new_Event_create_form.event_type.$invalid && !new_Event_create_form.event_type.$pristine}">
+                                     <span ng-show="new_Event_create_form.event_type.$dirty && new_Event_create_form.event_type.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Event Type is required</span>
+                            <datalist id="eventTypeList">
+                                <option value="Entertainment">
+                                <option value="Sport">
+                                <option value="Medical">
+                                <option value="Study">
+                            </datalist>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-control" ng-model="event_create.capacity" title="Capacity"
+                                   placeholder="Capacity" min="0" ng-required="true" name="capacity" ng-class="{'error-field' :  new_Event_create_form.capacity.$invalid && !new_Event_create_form.capacity.$pristine}">
+                           <span ng-show="new_Event_create_form.capacity.$dirty && new_Event_create_form.capacity.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Minimum value is 0</span>
+                        
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-control" ng-model="event_create.price" title="Price"
+                                   min="0" ng-required="true" name="price"
+                                   placeholder="Price" ng-class="{'error-field' :  new_Event_create_form.price.$invalid && !new_Event_create_form.price.$pristine}">
+                        <span ng-show="new_Event_create_form.price.$dirty && new_Event_create_form.price.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Minimum value is 0</span>
+                        </div>
+                                                <div class="form-group">
+                            <input type="text" placeholder="dd/mm/yyyy (Start Date)" ng-class="{error:_error}" ng-required="true"  min="currDate" name="start_date"
+                                   ng-model="event_create.startDate" class="form-control" ng-class="{'error-field' : dateError.show}"  ng-change="dateChanged(event_create.startDate,event_create.endDate)"
+                                   uib-datepicker-popup="{{format}}" is-open="startDatePopup.opened" ng-click="startDatePicker()"/>
+                             <span ng-show="dateError.show" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>{{dateError.message}}</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="dd/mm/yyyy (End Date)" ng-class="{error:_error}" ng-required="true"  min="currDate" ng-model="event_create.endDate" class="form-control"
+                            ng-class="{'error-field' : dateError.show}"
+                                   uib-datepicker-popup="{{format}}" is-open="endDatePopup.opened" ng-click="endDatePicker()" ng-change="dateChanged(event_create.startDate,event_create.endDate)"/>
+                           <span ng-show="dateError.show" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>{{dateError.message}}</span></div>
+                        <div class="form-group">
+
+                            <span style="float:left">Start Time : <span uib-timepicker ng-model="event_create.startTime" ng-required="true" ng-change="changed()" hour-step=1 minute-step=1
+                             show-meridian="true" ></span></span>
+                            <span style="float:right">End Time: <span uib-timepicker ng-model="event_create.endTime" ng-required="true" ng-change="changed()" hour-step=1 minute-step=1
+                                                                      show-meridian="true"></span></span>
+                        </div>
+                        <div class="form-group">
+
+                        </div>
+                        <!--enf of input fields-->
+                        <div class="form-group">
+                            <button class="form-control btn btn-default create-event-btn"  ng-disabled="!new_Event_create_form.$valid &&  !dateError.show">Create</button>
+                        </div>""
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</script>
+        <!--edit event in model-->
+        <script type="text/ng-template" id="editModel.html">
+    <div class="row ui-model-container">
+        <div class="head-modal">
+            <h2 class="col-md-12 modal-title" style="margin:40px">Edit Event!</h2>
+        </div>
+        <div class="body-modal">
+            <div class="row" style="margin:15px 15px 15px 50px">
+
+                <div class="col-xs-6 col-md-6 col-lg-6 col-sm-6 map-event-Create">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Select Your Loaction</h3>
+                    </div>
+                    <div class="modal-body">
+                        <map ng-if="render" center="[{{geopos.lat}}, {{geopos.lng}}]" zoom-control="true" zoom="8"
+                             on-click="click()"><marker position="{{geopos.lat}},{{geopos.lng}}" title="{{pin.title}}"></marker></map>
+                        <div>{{validation_text}}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <!--<div>Latitude:{{geopos.lat}} Longitude:{{geopos.lng}}</div>-->
+                    </div>
+                </div>
+
+                <div class="col-xs-6 col-md-6 col-lg-6 col-sm-6">
+                    <form id="editForm" name="new_Event_form" novalidate
+                          ng-submit="submit_editEvent(event_create,geopos.lat,geopos.lng)">
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="event_create.title" title="Event Title" name="title"
+                                ng-required= "true" placeholder="Event Title" ng-class="{'error-field' :  new_Event_form.title.$invalid && !new_Event_form.title.$pristine}">    
+                          <span ng-show="new_Event_form.title.$dirty && new_Event_form.title.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Title is required</span>    
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="eventDesc" ng-model="event_create.eventDescription"
+                                   title="Event Description" ng-required="true" placeholder="Event Description" 
+                                   ng-class="{'error-field' :  new_Event_form.eventDesc.$invalid && !new_Event_form.eventDesc.$pristine}">
+                            <span ng-show="new_Event_form.eventDesc.$dirty && new_Event_form.eventDesc.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Event Description is required</span>    
+                        </div>
+                        <div class="form-group">
+                    <input type="number" class="form-control" placeholder="Contact No." name="contact" ng-required="true" ng-pattern="/[0-9]{10}/"
+                        ng-model="event_create.contactDetail" ng-class="{'error-field' :  new_Event_form.contact.$invalid && !new_Event_form.contact.$pristine}">
+                    <span ng-show="new_Event_form.contact.$dirty && new_Event_form.contact.$error.required && new_Event_form.contact.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Contact is required</span>
+                    <span ng-show="new_Event_form.contact.$dirty && new_Event_form.contact.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Contact format : (0123456789)</span>
+                </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="event_create.address" title="Address" name="address"
+                                   ng-required="true" ng-class="{'error-field' :  new_Event_form.address.$invalid && !new_Event_form.address.$pristine}"
+                                   placeholder="Address">                    
+                         <span ng-show="new_Event_form.address.$dirty && new_Event_form.address.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Address is required</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" ng-model="event_create.city" title="City" ng-required="true" name="city"
+                            ng-class="{'error-field' :  new_Event_form.city.$invalid && !new_Event_form.city.$pristine}" placeholder="Event City">
+                            <span ng-show="new_Event_form.city.$dirty && new_Event_form.city.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>City is required</span>
+                        </div>
+                       <div class="form-group">
+                    <input type="text" class="form-control" name="country" placeholder="Country" ng-required="true" ng-model="event_create.country"
+                        ng-class="{'error-field' :  new_Event_form.country.$invalid && !new_Event_form.country.$pristine}">
+                    <span ng-show="new_Event_form.country.$dirty && new_Event_form.country.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Country is required</span>
+                </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Event Type" class="form-control" ng-required="true" name="event_type"
+                            ng-class="{'error-field' :  new_Event_form.event_type.$invalid && !new_Event_form.event_type.$pristine}"
+                                   ng-model="event_create.eventType" list="editEventTypeList">
+                            <datalist id="editEventTypeList">
+                                <option value="Entertainment">
+                                <option value="Sport">
+                                <option value="Medical">
+                                <option value="Study">
+                            </datalist>
+                        <span ng-show="new_Event_form.event_type.$dirty && new_Event_form.event_type.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Event Type is required</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-control" ng-model="event_create.capacity" title="Capacity" min="0" ng-required="true" name="capacity"
+                                   placeholder="Capacity" ng-class="{'error-field' :  new_Event_form.capacity.$invalid && !new_Event_form.capacity.$pristine}">
+                           <span ng-show="new_Event_form.event_type.$dirty && new_Event_form.event_type.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Minimum value is 0</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-control" ng-model="event_create.price" title="Price" min="0" ng-required="true" name="price"
+                                   placeholder="Price" ng-class="{'error-field' :  new_Event_form.price.$invalid && !new_Event_form.price.$pristine}">
+                        <span ng-show="new_Event_form.price.$dirty && new_Event_form.price.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Minimum value is 0</span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <input type="text" placeholder="dd/mm/yyyy (Start Date)" ng-required="true" min="currDate" ng-model="startDate_edit" name="startDate" class="form-control"
+                             ng-class="{'error-field' : dateError.show}" uib-datepicker-popup="{{format}}" is-open="startDatePopup.opened" ng-change="dateChanged(startDate_edit,endDate_edit)"
+                                   ng-click="startDatePicker()"/>
+                                   <span ng-show="dateError.show" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>{{dateError.message}}</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="dd/mm/yyyy (End Date)"  ng-class="{'error-field' : dateError.show}" ng-required="true" min="currDate" ng-model="endDate_edit" class="form-control" name="endDate"
+                                   uib-datepicker-popup="{{format}}" is-open="endDatePopup.opened"  ng-change="dateChanged(startDate_edit,endDate_edit)"
+                                   ng-click="endDatePicker()"/>
+                                   <span ng-show="dateError.show" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>{{dateError.message}}</span>
+                        </div>
+                        <div class="form-group">
+                            <span style="float:left">Start Time : <span uib-timepicker ng-model="startTime_edit"
+                                                                        ng-required="true" ng-change="changed()" hour-step=1 minute-step=1                                                             show-meridian="true"></span></span>
+                            <span style="float:right">End Time: <span uib-timepicker ng-model="endTime_edit"
+                                                                      ng-required="true" ng-change="changed()" hour-step=1 minute-step=1
+                                                                      show-meridian="true"></span></span>
+                        </div>
+                        <div class="form-group">
+
+                        </div>
+                        <!--enf of input fields-->
+                        <div class="form-group">
+                            <button class="form-control btn btn-default create-event-btn"  ng-disabled="!new_Event_form.$valid">Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+</script>

@@ -1,0 +1,73 @@
+{
+  "name": "user",
+  "base": "User",
+  "idInjection": true,
+  "properties": {
+    "fullName": {
+      "type": "string",
+      "required": false
+    },
+    "dob": {
+      "type": "string",
+      "required": false
+    },
+    "gender": {
+      "type": "string",
+      "required": false
+    },
+    "email": {
+      "type": "string",
+      "required": false
+    },
+    "password": {
+      "type": "string",
+      "required": false
+    },
+    "contactNum": {
+      "type": "string",
+      "required": false
+    },
+    "userRole": {
+      "type": "string",
+      "required": false
+    },
+    "address": {
+      "type": "string",
+      "required": false
+    },
+    "city": {
+      "type": "string",
+      "required": false
+    },
+    "country": {
+      "type": "string",
+      "required": false
+    },
+    "eventsCreated": {
+      "type": {
+        "array": {
+          "type": "string"
+        },
+        "required": false
+      }
+    },
+    "eventsSubscribed": {
+      "type": {
+        "array": {
+          "type": "string"
+        },
+        "required": false
+      }
+    }
+  },
+  "validations": [],
+  "relations": {
+    "events": {
+      "type": "hasMany",
+      "model": "events",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

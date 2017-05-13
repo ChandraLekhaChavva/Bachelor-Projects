@@ -1,0 +1,87 @@
+<div class="gray-bg">
+    <div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name">665</h1>
+            </div>
+            <h3>Register to Event-Management</h3>
+            <p>Create account to see it in action.</p>
+            <form class="m-t" role="form" name="signUp_form" ng-submit="signUpuser(userSignUp)">
+                <div class="form-group">
+                    <span><input type="text" class="form-control" placeholder="Full-name" name="full_name" required="true" ng-model="userSignUp.fullName" ng-class="{'error-field' : signUp_form.full_name.$invalid && !signUp_form.full_name.$pristine }"></span>
+                    <span ng-show="signUp_form.full_name.$dirty && signUp_form.full_name.$invalid && !signUp_form.full_name.$pristine" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> You name is required.</span>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" ng-model="userSignUp.gender" name="gender" required="true" placeholder="Gender" ng-class="{'error-field' : signUp_form.gender.$invalid && !signUp_form.gender.$pristine}">
+                        <option value="" disabled selected hidden>Gender</option>
+                        <option value="male" selected>Male</option>
+                        <option value="female">Female</option>
+                   </select>
+                    <span ng-show="signUp_form.gender.$dirty && signUp_form.gender.$invalid && !signUp_form.gender.$pristine" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Gender is required.</span>
+                </div>
+                <div class="form-group">
+                    <input onfocus="(this.type='date')" class="form-control" placeholder="Date of birth" required="true" name="dob" ng-model="userSignUp.dob"
+                        max="2006-12-31" ng-class="{'error-field' : signUp_form.dob.$invalid && !signUp_form.dob.$pristine}">
+                    <span ng-show="signUp_form.dob.$dirty && signUp_form.dob.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Date of birth is required.</span>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email" required="true" ng-pattern=" /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/"
+                        name="email" ng-model="userSignUp.email" ng-class="{'error-field' : signUp_form.email.$invalid && !signUp_form.email.$pristine}">
+                    <span ng-show="signUp_form.email.$dirty && (signUp_form.email.$error.email || signUp_form.email.$invalid)" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Email required : [a-z,0-9 + @ + a-z,0-9].com</span>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" name="password" placeholder="Password" ng-required="true" ng-pattern=" /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/ "
+                        ng-model="userSignUp.password" ng-class="{'error-field' :  signUp_form.password.$invalid && !signUp_form.password.$pristine}">
+                    <span ng-show="signUp_form.password.$dirty && signUp_form.password.$error.required && signUp_form.password.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Password is required</span>
+                    <span ng-show="signUp_form.password.$invalid && !signUp_form.password.$error.required" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Minimum 8 characters at least 1 Alphabet and 1 Number</span>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" placeholder="Contact No." name="contact" ng-required="true" ng-pattern="/[0-9]{10}/"
+                        ng-model="userSignUp.contactNo" ng-class="{'error-field' :  signUp_form.contact.$invalid && !signUp_form.contact.$pristine}">
+                    <span ng-show="signUp_form.contact.$dirty && signUp_form.contact.$error.required && signUp_form.contact.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Contact is required</span>
+                    <span ng-show="signUp_form.contact.$dirty && signUp_form.contact.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Contact format : (0123456789)</span>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Addresss" ng-required="true" ng-model="userSignUp.address" name="address"
+                        ng-class="{'error-field' :  signUp_form.address.$invalid && !signUp_form.address.$pristine}">
+                    <span ng-show="signUp_form.address.$dirty && signUp_form.address.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Address is required</span>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="City" ng-required="true" name="city" ng-model="userSignUp.city" ng-class="{'error-field' :  signUp_form.city.$invalid && !signUp_form.city.$pristine}">
+                    <span ng-show="signUp_form.city.$dirty && signUp_form.city.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>City is required</span>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="country" placeholder="Country" ng-required="true" ng-model="userSignUp.country"
+                        ng-class="{'error-field' :  signUp_form.country.$invalid && !signUp_form.country.$pristine}">
+                    <span ng-show="signUp_form.country.$dirty && signUp_form.country.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Country is required</span>
+                </div>
+                <div class="form-group">
+                    <select class="form-control" ng-model="userSignUp.userRole" name="role" ng-required="true" placeholder="User Type"
+                     ng-class="{'error-field' :  signUp_form.role.$invalid && !signUp_form.role.$pristine}">
+                        <option value="" disabled selected hidden>You are</option>
+                        <option value="admin" selected>Admin</option>
+                        <option value="user">User</option>
+                                      </select>
+                    <span ng-show="signUp_form.role.$dirty && signUp_form.role.$invalid" class="error"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Select User Type</span>
+                </div>
+                <!--<div class="form-group">
+                    <input type="checkbox" class="termsPolicies" name="terms_Policies" ng-model="" required/><label> Agree the terms and policy </label>
+                </div>-->
+                <button type="submit" value="submit" class="btn btn-primary block full-width m-b" ng-disabled="!signUp_form.$valid">Register</button>
+                <p class="text-muted text-center"><small>Already have an account?</small></p>
+                <a class="btn btn-sm btn-white btn-block" ui-sref="login">Login</a>
+            </form>
+            <p class="m-t"> <small>Event Management System &copy; 2016</small> </p>
+        </div>
+    </div>
+    <!-- iCheck -->
+    <script src="js/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+</div>
